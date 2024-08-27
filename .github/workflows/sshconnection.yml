@@ -1,0 +1,44 @@
+name: connection to ec2  
+
+on:  
+  push:  
+    branches:  
+      - main  
+
+jobs:  
+  deploy:  
+    runs-on: ubuntu-latest  
+    steps:  
+      - name: Checkout repository  
+        uses: actions/checkout@v3  
+
+      - name: Execute remote SSH command to get username  
+        uses: appleboy/ssh-action@v1.0.3  
+        with:  
+          host: ${{ secrets.HOST }}  
+          username: ${{ secrets.USERNAME }}  
+          key: ${{ secrets.KEY }}  
+          port: ${{ secrets.PORT }}  
+          script: whoami  
+
+      - name: Run multiple remote commands  
+        uses: appleboy/ssh-action@v1.0.3  
+        with:  
+          host: ${{ secrets.HOST }}  
+          username: ${{ secrets.USERNAME }}  
+          key: ${{ secrets.KEY }}  
+          port: ${{ secrets.PORT }}  
+          script: |  
+            sudo apt-get update  
+            sudo apt-get install -y apache2  
+            sudo systemctl start apache2  
+            sudo systemctl enable apache2  
+            cd /home  
+            sudo mv * /var/www/html
+      
+
+
+
+
+
+  
