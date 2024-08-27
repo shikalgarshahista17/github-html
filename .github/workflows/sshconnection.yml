@@ -19,7 +19,8 @@ jobs:
           username: ${{ secrets.USERNAME }}  
           key: ${{ secrets.KEY }}  
           port: ${{ secrets.PORT }}  
-          script: whoami  
+          script:  |  
+            ssh -vvv -o StrictHostKeyChecking=no -i ${{ secrets.KEY }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} "whoami" 
 
       - name: Run multiple remote commands  
         uses: appleboy/ssh-action@v1.0.3  
